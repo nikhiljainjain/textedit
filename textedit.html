@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<body><br><br><center>
+<button type='button' id='b1'><b>B</b></button>
+<button type='button' id='i1'><i>I</i></button>
+<button type='button' id='ul1'><small><ul><li>Item 1</li><li>Item2</li></ul></small></button>
+<button type='button' id='c1'><strong>Code</strong></button>
+<button type='button' id='ol1'><small><ol><li>Item 1</li><li>Item 2</li></ol></small></button>
+<br>
+<br>
+<textarea autofocus id='nikhil1' cols='32' wrap='hard' onkeyup='checkup()'></textarea>
+<!--input id='nikhil' type='submit' value='submit'-->
+<p id='me1'>
+</p>
+</center>
+<script>
+var  buttonPressed = 0, itallicCodeRun = 0, boldCodeRun = 0, codeCodeRun = 0;
+$('input').on('keydown',function(event){
+	if (event.which  ==  17){  
+		buttonPressed  =  17;
+		}
+	if ( buttonPressed  ===  17 && event.which  ==  73){
+		buttonPressed = 0;
+		$('#nikhil1').val($('#nikhil1').val()  +  '** '  +  ' **' );
+		itallicCodeRun=1;
+		}//itallic
+	if ( buttonPressed  ===  17 && event.which  ===  66){
+		buttonPressed = 0;
+		boldCodeRun=1;
+		$('#nikhil1').val($('#nikhil1').val()  +  ' ~ '  +   ' ~ ' );
+		}//bold
+	if (event.which  ==  13){
+		$('#nikhil1').val($('#nikhil1')  +  '<br>' );
+		}
+});
+$('#b1').click(function(){
+	$('#nikhil1').val($('#nikhil1').val()  +  ' ~ '  +   ' ~ ' );
+	boldCodeRun = 1;
+});
+
+$('#i1').click(function(){
+	$('#nikhil1').val($('#nikhil1').val()  +  '** '  +   ' **' );
+	itallicCodeRun = 1;
+});
+
+$('#c1').click(function(){
+	$('#nikhil1').val($('#nikhil1').val()  +  '?? '  +  ' ??' );
+	codeCodeRun = 1;
+});
+
+$('#l1').click(function(){+
+	$('#nikhil1').val($('#nikhil1').val()  +  '__ '  +  ' __' );
+});
+
+//document.getElementById('nikhil').addEventListener('click',
+function checkup(){
+var tempString, inputValue  =  document.getElementById('nikhil1').value;
+
+var  tempIndex, pattrnSrch;
+
+pattrnSrch = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gmi;
+
+tempIndex = inputValue.search(pattrnSrch);
+
+//here code for the link
+
+var wordFirstLetter = 0 ;
+
+var wordLastLetterIndex = 0;
+
+if (tempIndex != -1){
+	tempString = pattrnSrch.exec(inputValue) ; 
+	if (tempString.constructor === Array){
+	tempString = tempString[0];
+	}
+	inputValue = inputValue.replace(tempString,"<font style='color:red'>"  + tempString + '</font>' );
+}
+
+var stringToReplace = '' ;  
+var stringReplaceWith = '' ;
+
+if (boldCodeRun == 1){//	here code for bold 
+	wordFirstLetter  =  inputValue.indexOf('~');
+	while(wordFirstLetter != inputValue.lastIndexOf('~')){
+		wordLastLetterIndex = wordFirstLetter;
+		tempIndex = inputValue.indexOf('~',wordLastLetterIndex + 2);
+		if (tempIndex == -1){
+			break;
+		}
+		else{
+			stringToReplace = inputValue.slice(wordLastLetterIndex, tempIndex + 1);
+			stringReplaceWith = inputValue.slice(wordLastLetterIndex + 1,tempIndex);
+			wordFirstLetter = tempIndex;
+			inputValue = inputValue.replace(stringToReplace,'<b>' + stringReplaceWith + '</b>');
+			wordLastLetterIndex = 0;
+			tempIndex = 0;
+		}
+	}
+}
+
+if (itallicCodeRun == 1){//	code for itallic
+	wordFirstLetter  =  inputValue.indexOf('**');
+	while(wordFirstLetter != inputValue.lastIndexOf('**')){
+		wordLastLetterIndex = wordFirstLetter;
+		tempIndex = inputValue.indexOf('**',wordLastLetterIndex + 2);
+		if (tempIndex == -1){
+			break;
+		}
+		else{
+			stringToReplace = inputValue.slice(wordLastLetterIndex,tempIndex + 2);
+			stringReplaceWith = inputValue.slice(wordLastLetterIndex + 2,tempIndex);
+			wordFirstLetter = tempIndex;
+			inputValue = inputValue.replace(stringToReplace,'<i>' + stringReplaceWith + '</i>');
+			wordLastLetterIndex = 0;
+			tempIndex = 0;
+		}
+	}
+}
+
+if (codeCodeRun == 1){	//code for code upload
+	wordFirstLetter  =  inputValue.indexOf('??');
+		while(wordFirstLetter != inputValue.lastIndexOf('??')){
+		wordLastLetterIndex = wordFirstLetter;
+		tempIndex = inputValue.indexOf('??',wordLastLetterIndex + 2);
+		if (tempIndex == -1){
+			break;
+		}
+		else{
+			stringToReplace = inputValue.slice(wordLastLetterIndex,tempIndex + 2);
+			stringReplaceWith = inputValue.slice(wordLastLetterIndex + 2,tempIndex);
+			wordFirstLetter = tempIndex;
+			inputValue = inputValue.replace(stringToReplace,'<code>' + stringReplaceWith + '</code>');
+			wordLastLetterIndex = 0;
+			tempIndex = 0;
+		}
+	}
+}
+
+document.getElementById('me1').innerHTML  = '<pre><code>' + inputValue +  '</code></pre>';}
+</script>
+</body>
+</html>
